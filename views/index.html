@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html ng-app="tripAPI">
+<head>
+    <title>API Node+Angular</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="/javascripts/angular.min.js"></script>
+
+    <script src="/javascripts/angular-messages.min.js"></script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhzXJZM_cpBgqBE6tFROJmlrbz1Nzi0rs"></script>
+
+    <!-- Kube CSS -->
+    <link rel="stylesheet" href="/stylesheets/kube.min.css" />
+
+    <link rel="stylesheet" href="/stylesheets/font-awesome.min.css" />
+
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+
+</head>
+<body ng-controller="TripController as ctrltrip" class="main">
+    <div class="row gutters" style="height: 850px;">
+        <div class="col col-7">
+            <!-- DIV GOOGLE MAP -->
+            <div id="map" class="mapgoogle"></div>
+            <div id="googlemappanel" class="panel"></div>
+            <!-- FIN DIV GOOGLE MAP -->
+        </div>
+        <div class="col col-5">
+            <!-- DIV TAB -->
+            <nav class="tabs" data-component="tabs">
+                <ul>
+                    <li class="active"><a href="#seetrip" class="strong">Voir un trip</a></li>
+                    <li><a href="#addtrip" class="strong">Ajouter un trip</a></li>
+                </ul>
+            </nav>
+            <!-- FIN DIV TAB -->
+
+            <!-- DIV TRANSPORT -->
+            <div id="seetrip">
+                <fieldset>
+                    <legend>Voir un trip</legend>
+                    <div>
+                        <select name="triplist" ng-model="ctrltrip.tripchoisi" ng-change="ctrltrip.seeTrip()">
+                            <option ng-repeat="trip in ctrltrip.trips track by $index" value="{{$index}}">{{trip.title}}</option>
+                        </select>
+                        <div class="row gutters auto" style="margin-top: 4%">
+                            <div class="col offset-2">
+                                <i class="fa fa-trash-o fa-2x trash" aria-hidden="true" ng-click="ctrltrip.delTrip(ctrltrip.idTrip)"></i>
+                            </div>
+                            <div class="col">
+                                <pre>trips: {{ ctrltrip.nbtripsinlist }}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <!-- DIV MSG ERREUR DIRECTION -->
+                <div class="message error" data-component="message" ng-if="ctrltrip.msgErrorDirectionZeroResult">
+                    Erreur! Ce trajet ne retourne aucun résultat. Vérifier les Coordonnées
+                    <span class="close small"></span>
+                </div>
+                <!-- FIN DIV MSG ERREUR DIRECTION -->
+                <fieldset ng-if="ctrltrip.tripchoisi">
+                    <legend>Trip {{ tripavoir.title }}</legend>
+                    <div class="form-item">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th class="w50 center">
+                                        <i class="fa fa-car fa-2x" 
+                                           aria-hidden="true" 
+                                           ng-class="{error: ctrltrip.tripavoir.vehicule=='DRIVING'}">
+                                        </i>
+                                        <i class="fa fa-street-view fa-2x" 
+                                           aria-hidden="true" 
+                                           ng-class="{error: ctrltrip.tripavoir.vehicule=='WALKING'}">
+                                        </i>
+                                        <i class="fa fa-bicycle fa-2x" 
+                                           aria-hidden="true" 
+                                           ng-class="{error: ctrltrip.tripavoir.vehicule=='BICYCLING'}">
+                                        </i>
+                                        <i class="fa fa-bus fa-2x" 
+                                           aria-hidden="true" 
+                                           ng-class="{error: ctrltrip.tripavoir.vehicule=='TRANSIT'}">
+                                        </i>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="strong">Nom:</td>
+                                    <td colspan="2" class="center">{{ ctrltrip.tripavoir.title }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="strong" rowspan="2" style="vertical-align: middle;">Départ</td>
+                                    <td colspan="3" class="center">{{ ctrltrip.addressFrom }}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" class="center">
+                                        {{ ctrltrip.tripavoir.coordinates_from.lat }}; {{ ctrltrip.tripavoir.coordinates_from.lon }}
+                                    </td>
+                                </tr>
+                                </tr>
+                                <tr>
+                                    <td class="strong" rowspan="2" style="vertical-align: middle;">Arrivée</td>
+                                    <td colspan="3" class="center">{{ ctrltrip.addressTo }}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" class="center">
+                                        {{ ctrltrip.tripavoir.coordinates_to.lat }}; {{ ctrltrip.tripavoir.coordinates_to.lon }}
+                                    </td>
+                                </tr>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" class="noborderbottom center strong">Commentaire</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" class="noborderbottom center">{{ ctrltrip.tripavoir.comment }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </fieldset>
+            </div>
+            <!-- FIN DIV TRANSPORT -->
+
+            <!-- DIV CREATE TRANSPORT -->
+            <div id="addtrip">
+                <form name="form" novalidate>
+                    <fieldset>
+                        <fieldset>
+                            <legend>Coordonnées</legend>
+                            <div class="form-item">
+                                <label>Départ <span class="req">*</span></label>
+                                <div class="row gutters auto">
+                                    <div class="col">
+                                        <input type="number" 
+                                            name="tripDepartLat" 
+                                            ng-model="ctrltrip.form.departLat" 
+                                            ng-class="{'error': form.tripDepartLat.$invalid && !form.tripDepartLat.$pristine, 
+                                                       'valid': form.tripDepartLat.$valid }" 
+                                            max="200" min="-100" step="0.01" 
+                                            string-to-number
+                                            required />
+                                    </div>
+                                    <div class="col">
+                                        <input type="number" 
+                                            name="tripDepartLon" 
+                                            ng-model="ctrltrip.form.departLon" 
+                                            ng-class="{'error': form.tripDepartLon.$invalid && !form.tripDepartLon.$pristine, 
+                                                       'valid': form.tripDepartLon.$valid }" 
+                                            max="200" min="-100" step="0.01" 
+                                            string-to-number 
+                                            required />
+                                    </div>
+                                </div>
+                                <label class="checkbox">
+                                    <input type="checkbox" name="tripDepartCaptureCoord" ng-model="ctrltrip.captureFrom" />
+                                    capture
+                                </label>
+                            </div>
+                            <div class="form-item">
+                                <label>Arrivée <span class="req">*</span></label>
+                                <div class="row gutters auto">
+                                    <div class="col">
+                                        <input type="number" 
+                                            name="tripArriveLat" 
+                                            ng-model="ctrltrip.form.arriveLat" 
+                                            ng-class="{'error': form.tripArriveLat.$invalid && !form.tripArriveLat.$pristine, 
+                                                       'valid': form.tripArriveLat.$valid }" 
+                                            min="-100" max="200" step="0.01" 
+                                            required />
+                                    </div>
+                                    <div class="col">
+                                        <input type="number" 
+                                            name="tripArriveLon" 
+                                            ng-model="ctrltrip.form.arriveLon" 
+                                            ng-class="{'error': form.tripArriveLon.$invalid && !form.tripArriveLon.$pristine, 
+                                                       'valid': form.tripArriveLon.$valid }" 
+                                            min="-100" max="200" step="0.01" 
+                                            required />
+                                    </div>
+                                </div>
+                                <label class="checkbox">
+                                    <input type="checkbox" name="tripArriveCaptureCoord" ng-model="ctrltrip.captureTo" />
+                                    capture
+                                </label>
+                            </div>
+                        </fieldset>
+                        <legend>Ajouter un trip</legend>
+                        <div class="form-item">
+                            <label>Nom du trip <span class="req">*</span></label>
+                            <input type="text" 
+                                   name="tripname" 
+                                   ng-model="ctrltrip.form.title" 
+                                   class="w50" 
+                                   ng-class="{
+                                       'error': form.tripname.$invalid && !form.tripname.$pristine, 
+                                       'valid': form.tripname.$valid }" 
+                                   ng-minlength="3" 
+                                   ng-maxlength="20" 
+                                   required />
+                            <div class="desc" ng-show="form.tripname.$invalid && !form.tripname.$pristine">min. 3, max. 20 car</div>
+                        </div>
+                        <div class="form-item">
+                            <label>Vehicule <span class="req">*</span></label>
+                            <select id="selectvehicule" ng-model="ctrltrip.form.vehicule">
+                                <option ng-repeat="vehicule in ctrltrip.vehicules" value="{{vehicule.value}}">{{vehicule.name}}</option>
+                            </select>
+                        </div>
+                        <div class="form-item">
+                            <textarea name="trip-comment" ng-model="ctrltrip.form.comment" rows="5"></textarea>
+                        </div>
+                        <div class="row gutter auto">
+                            <div class="col">
+                                <button type="submit" 
+                                        ng-click="ctrltrip.addTrip()" 
+                                        ng-disabled="form.$invalid" 
+                                        ng-class="{'button disabled': form.$invalid}">
+                                        Ajouter
+                                </button>
+                            </div>
+                            <div class="col">
+                                <div id="msgAddTrip" 
+                                    class="message" 
+                                    style="padding-top: 12px; padding-bottom: 8px;"
+                                    data-component="message" 
+                                    ng-if="ctrltrip.msgAddTrip" 
+                                    ng-class="{ 'error': !ctrltrip.msgAddTrip.stat, 'success': ctrltrip.msgAddTrip.stat }">
+                                    {{ ctrltrip.msgAddTrip.msg }}
+                                    <span class="close small" style="top: 0.5rem;"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <!-- FIN DIV CREATE TRANSPORT -->
+
+        </div>
+    </div>
+
+    <script src="/core.js"></script>
+
+    <!-- Pour le systeme de tabulation -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="/javascripts/kube.min.js"></script>
+</body>
+</html>
