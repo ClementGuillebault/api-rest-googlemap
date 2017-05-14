@@ -184,7 +184,6 @@ function TripController(googlemapFactory, requestFactory, vehiculesFactory, $roo
             trips    = response;
             updNbTrip();
 
-            console.log('get api/transports');
             return vm.trips;
 
         })
@@ -203,7 +202,6 @@ function TripController(googlemapFactory, requestFactory, vehiculesFactory, $roo
 
         requestFactory.postNewTrip(vm.form).then(function(data) {
 
-            console.log(data);
             vm.trips = data;
             trips    = data;
 

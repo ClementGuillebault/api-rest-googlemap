@@ -18,7 +18,6 @@ router.get('/api/transports', function(req, res) {
  * @return {object} retourne l'object modifié
  */
 router.post('/api/transports', function(req, res) {
-	console.log(req.body.departlat);
 	let tmp = {
 		"title": req.body.title,
 		"coordinates_from": {
@@ -43,7 +42,6 @@ router.post('/api/transports', function(req, res) {
  * @return {object} retourne l'object modifié
  */
 router.delete('/api/transports/:id', function(req, res) {
-	console.log(req.params.id);
 	trip.deleteTrip(req.params.id);
 	res.json(trip);
 });

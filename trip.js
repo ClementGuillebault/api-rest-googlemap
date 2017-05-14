@@ -35,9 +35,7 @@ class Trip {
     }
 
     deleteTrip(id) {
-        console.log('id: ' + id);
         this._trip['transports'].splice(id, 1);
-        console.log(this._trip);
         this.updateJson();
         return this._trip;
     }
