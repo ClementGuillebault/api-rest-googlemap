@@ -6,15 +6,19 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <!-- Angular 1.6.4 -->
     <script src="/javascripts/angular.min.js"></script>
 
+    <!-- Angular message 1.6.4 -->
     <script src="/javascripts/angular-messages.min.js"></script>
 
-    <script src="https://maps.googleapis.com/maps/api/js?key=YOUKEY"></script>
+    <!-- Google Map -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhzXJZM_cpBgqBE6tFROJmlrbz1Nzi0rs"></script>
 
     <!-- Kube CSS -->
     <link rel="stylesheet" href="/stylesheets/kube.min.css" />
 
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="/stylesheets/font-awesome.min.css" />
 
     <link rel="stylesheet" href="/stylesheets/style.css" />
@@ -92,7 +96,7 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td class="strong">Nom:</td>
+                                    <td class="strong">Nom</td>
                                     <td colspan="2" class="center">{{ ctrltrip.tripavoir.title }}</td>
                                 </tr>
                                 <tr>
@@ -130,7 +134,7 @@
 
             <!-- DIV CREATE TRANSPORT -->
             <div id="addtrip">
-                <form name="form" novalidate>
+                <form name="form" ng-model="form" novalidate>
                     <fieldset>
                         <fieldset>
                             <legend>Coordonnées</legend>
@@ -244,7 +248,16 @@
         </div>
     </div>
 
+    <!-- Angular core -->
     <script src="/core.js"></script>
+
+    <!-- Angular factory -->
+    <script src="/factory/googlemapfactory.js"></script>
+    <script src="/factory/requestfactory.js"></script>
+    <script src="/factory/vehiculesfactory.js"></script>
+
+    <!-- Angular controller -->
+    <script src="/controller/tripcontroller.js"></script>
 
     <!-- Pour le systeme de tabulation -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
