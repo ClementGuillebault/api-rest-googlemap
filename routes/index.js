@@ -1,6 +1,6 @@
-var express = require('express');
-var router  = express.Router();
-var Trip = require('../trip.js');
+let express = require('express');
+let router  = express.Router();
+let Trip = require('../trip.js');
 
 let trip = new Trip('transports.json');
 
@@ -8,7 +8,7 @@ let trip = new Trip('transports.json');
  * Retourne le fichier json actuel sous format text/json
  * GET server/api/transports
  */
-router.get('/api/transports', function(req, res) {
+router.get('/api/transports', (req, res) => {
 	res.json(trip);
 });
 
@@ -17,7 +17,7 @@ router.get('/api/transports', function(req, res) {
  * POST server/api/transports
  * @return {object} retourne l'object modifié
  */
-router.post('/api/transports', function(req, res) {
+router.post('/api/transports', (req, res) => {
 	let tmp = {
 		"title": req.body.title,
 		"coordinates_from": {
@@ -41,7 +41,7 @@ router.post('/api/transports', function(req, res) {
  * DELETE server/api/transports
  * @return {object} retourne l'object modifié
  */
-router.delete('/api/transports/:id', function(req, res) {
+router.delete('/api/transports/:id', (req, res) => {
 	trip.deleteTrip(req.params.id);
 	res.json(trip);
 });
@@ -49,7 +49,7 @@ router.delete('/api/transports/:id', function(req, res) {
 /**
  * Permet la gestion du front end par angularjs
  */
-router.get('*', function(req, res) {
+router.get('*', (req, res) => {
 	res.sendfile('./views/index.html');
 });
 
