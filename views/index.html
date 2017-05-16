@@ -7,13 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Angular 1.6.4 -->
-    <script src="/javascripts/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
 
     <!-- Angular message 1.6.4 -->
-    <script src="/javascripts/angular-messages.min.js"></script>
-
-    <!-- Google Map -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhzXJZM_cpBgqBE6tFROJmlrbz1Nzi0rs"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-messages/1.6.4/angular-messages.min.js"></script>
 
     <!-- Kube CSS -->
     <link rel="stylesheet" href="/stylesheets/kube.min.css" />
@@ -26,12 +23,12 @@
 </head>
 <body ng-controller="TripController as ctrltrip" class="main">
     <div class="row gutters" style="height: 850px;">
+        <!-- DIV GOOGLE MAP -->
         <div class="col col-7">
-            <!-- DIV GOOGLE MAP -->
             <div id="map" class="mapgoogle"></div>
             <div id="googlemappanel" class="panel"></div>
-            <!-- FIN DIV GOOGLE MAP -->
         </div>
+        <!-- FIN DIV GOOGLE MAP -->
         <div class="col col-5">
             <!-- DIV TAB -->
             <nav class="tabs" data-component="tabs">
@@ -247,6 +244,9 @@
 
         </div>
     </div>
+
+    <!-- Google Map -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhzXJZM_cpBgqBE6tFROJmlrbz1Nzi0rs"></script>
 
     <!-- Angular core -->
     <script src="/core.js"></script>
