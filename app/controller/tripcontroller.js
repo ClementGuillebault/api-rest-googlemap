@@ -38,7 +38,7 @@ function TripController(googlemapFactory, requestFactory, vehiculesFactory, $roo
         })
         .catch((error) => {
             console.log(error);
-            $q.reject(err); //BEWARE !!!!
+            $q.reject(err);
         })
         .then((valid) => { 
             console.log('La page est correctement chargée!');
@@ -152,6 +152,7 @@ function TripController(googlemapFactory, requestFactory, vehiculesFactory, $roo
             vm.tripchoisi = null;
 
             updNbTrip();
+            googlemapFactory.refresh();
 
         })
         .catch((err) => {

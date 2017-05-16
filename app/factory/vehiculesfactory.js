@@ -2,6 +2,10 @@ angular
     .module('tripAPI')
     .factory('vehiculesFactory', vehiculesFactory);
 
+/**
+ * Factory de données liées aux véhicules.
+ * @return {array} Un tableau avec les véhicules
+ */
 function vehiculesFactory() {
 
     /* Tableau des moyen de locomotion */
