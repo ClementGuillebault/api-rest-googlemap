@@ -2,6 +2,13 @@ angular
     .module('tripAPI')
     .factory('googlemapFactory', googlemapFactory);
 
+
+/**
+ * Factory pour gerer la google map et les fonctions liées
+ * @param $q 
+ * @param $rootScope
+ * @return {object} retourne les fonctions de la factory
+ */
 function googlemapFactory($q, $rootScope) {
 
     let map;
@@ -13,11 +20,19 @@ function googlemapFactory($q, $rootScope) {
         setDirection: setDirection,
         geocoding: geocoding,
         initMap: initMap,
-        map: map
+        refresh: refresh
     };
 
     return googlemap;
 
+    /**
+     * Met en place le service directionRenderer avec les coordonnées envoyées
+     * @function setDirection
+     * @param {array} tabDepart Contient les coordonnées du point de départ
+     * @param {array} tabArrive Contient les coordonnées du point d'arrivé
+     * @param {string} travel Le moyen de transport utilisé
+     * @return {promise} Retourne un booléen sous forme de promise
+     */
     function setDirection(tabDepart, tabArrive, travel) {
 
         let directionErrorZeroResult = $q.defer();
@@ -31,7 +46,10 @@ function googlemapFactory($q, $rootScope) {
             travelMode: 'DRIVING'
         }, (response, status) => {
             if (status === 'OK') {
+                directionsDisplay.setMap(map);
                 directionsDisplay.setDirections(response);
+                directionsDisplay.setPanel(document.getElementById('googlemappanel'));
+
                 directionErrorZeroResult.resolve(false);
             }
             else {
@@ -45,9 +63,15 @@ function googlemapFactory($q, $rootScope) {
         return directionErrorZeroResult.promise;
     };
 
+    /**
+     * Retourne l'adresse formaté grâce à des coordonnées
+     * @function geocoding
+     * @param {string} lat Latitude
+     * @param {string} lng Longitude
+     * @return {promise} Retourne l'adresse formaté sous forme de promise
+     */
     function geocoding(lat, lng) {
 
-        /* L'adresse formaté des coordonnées */
         let adressFromCoord = $q.defer();
 
         let latlng = { 
@@ -72,6 +96,10 @@ function googlemapFactory($q, $rootScope) {
         return adressFromCoord.promise;
     };
 
+    /**
+     * Initialisation de la map et de l'evmt lié
+     * @function initMap
+     */
     function initMap() {
 
         map = new google.maps.Map(document.getElementById('map'), {
@@ -80,12 +108,21 @@ function googlemapFactory($q, $rootScope) {
         });
 
         directionsDisplay.setMap(map);
-        directionsDisplay.setPanel(document.getElementById('googlemappanel'));
 
+        /* Event pour la capture des coordonnées */
         map.addListener('rightclick', (coord) => {
             $rootScope.$broadcast('listen', coord);
         });
 
     };
+
+    /**
+     * Permet de rafraichir la map
+     * @function refresh
+     */
+    function refresh() {
+        directionsDisplay.setMap(null);
+        directionsDisplay.setPanel(null);
+    }
 
 }
