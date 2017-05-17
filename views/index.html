@@ -63,8 +63,9 @@
                     <span class="close small"></span>
                 </div>
                 <!-- FIN DIV MSG ERREUR DIRECTION -->
+                <!-- DIV SEE TRIP -->
                 <fieldset ng-if="ctrltrip.tripchoisi">
-                    <legend>Trip {{ tripavoir.title }}</legend>
+                    <legend>{{ ctrltrip.tripavoir.title }}</legend>
                     <div class="form-item">
                         <table>
                             <thead>
@@ -126,6 +127,7 @@
                         </table>
                     </div>
                 </fieldset>
+                <!-- FIN DIV SEE TRIP -->
             </div>
             <!-- FIN DIV TRANSPORT -->
 
@@ -159,7 +161,7 @@
                                             required />
                                     </div>
                                 </div>
-                                <label class="checkbox">
+                                <label class="checkbox w50">
                                     <input type="checkbox" name="tripDepartCaptureCoord" ng-model="ctrltrip.captureFrom" />
                                     capture
                                 </label>
@@ -186,7 +188,7 @@
                                             required />
                                     </div>
                                 </div>
-                                <label class="checkbox">
+                                <label class="checkbox w50">
                                     <input type="checkbox" name="tripArriveCaptureCoord" ng-model="ctrltrip.captureTo" />
                                     capture
                                 </label>
@@ -214,7 +216,7 @@
                             </select>
                         </div>
                         <div class="form-item">
-                            <textarea name="trip-comment" ng-model="ctrltrip.form.comment" rows="5"></textarea>
+                            <textarea name="trip-comment" ng-model="ctrltrip.form.comment" rows="5" class="areatext"></textarea>
                         </div>
                         <div class="row gutter auto">
                             <div class="col">
