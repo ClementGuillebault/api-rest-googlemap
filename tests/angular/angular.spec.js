@@ -122,13 +122,5 @@ describe('Controller', () => {
 
         });
 
-        it('should active error and succes message', () => {
-            let $scope = {};
-            let controler = $controller('TripController', {
-                $scope: $scope
-            });
-
-            console.log(controler);
-        });
     });
 });
