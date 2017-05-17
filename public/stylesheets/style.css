@@ -23,3 +23,7 @@
 .valid {
     border: 1px solid #6ad5cb;
 }
+
+.areatext {
+    resize: none;
+}
