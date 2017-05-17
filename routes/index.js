@@ -1,8 +1,9 @@
 let express = require('express');
 let router  = express.Router();
 let Trip = require('../trip.js');
+let fs = require('fs');
 
-let trip = new Trip('transports.json');
+let trip = new Trip('transports.json', fs);
 
 /**
  * Retourne le fichier json actuel sous format text/json
