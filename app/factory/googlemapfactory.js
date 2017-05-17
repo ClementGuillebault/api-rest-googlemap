@@ -40,10 +40,12 @@ function googlemapFactory($q, $rootScope) {
         let depart = tabDepart.join(', ');
         let arrive = tabArrive.join(', ');
 
+        console.log(travel);
+
         directionsService.route({
             origin: depart,
             destination: arrive,
-            travelMode: 'DRIVING'
+            travelMode: travel
         }, (response, status) => {
             if (status === 'OK') {
                 directionsDisplay.setMap(map);
@@ -89,7 +91,7 @@ function googlemapFactory($q, $rootScope) {
                 }
             }
             else {
-                console.log('Geocoder failed due to: ' + status);
+                console.log('Erreur GeoCoder: ' + status);
             }
         });
 
@@ -97,7 +99,7 @@ function googlemapFactory($q, $rootScope) {
     };
 
     /**
-     * Initialisation de la map et de l'evmt lié
+     * Initialisation de la map et de l'evnmt lié
      * @function initMap
      */
     function initMap() {
