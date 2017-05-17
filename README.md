@@ -68,11 +68,11 @@ $ karma start
 ### Questions
 
 -What you like, what you dislike about this test and computer sciences
-  - like : Nodejs, angular and all computer things!
+  - like : Nodejs, angular
   - dislike : css and design
 
 -Tell us how long did it take to code this
-  - 20-30h
+  - I don't know... maybe 30h...
 
 -What salary would you like for a position in Caen, Normandy
   - depends work
