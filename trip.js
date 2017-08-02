@@ -77,7 +77,9 @@ class Trip {
      * @function updateJson
      */
     updateJson() {
-        let stream = this._fs.createWriteStream(this._path, {'encoding': 'utf8'});
+        let stream = this._fs.createWriteStream(
+            this._path, {'encoding': 'utf8'}
+        );
         stream.write(JSON.stringify(this._trip, null, 4));
         stream.end();
     }
