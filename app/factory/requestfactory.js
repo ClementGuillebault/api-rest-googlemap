@@ -4,10 +4,10 @@ angular
 
 /**
  * Factory pour la gestion des requetes http
- * @param $http 
+ * @param {$http} $http
+ * @return {promise} promise
  */
 function requestFactory($http) {
-
     let request = {
         getRoot: getRoot,
         postNewTrip: postNewTrip,
@@ -18,6 +18,7 @@ function requestFactory($http) {
 
     /**
      * Requete GET sur /api/transports
+     * @return {promise}
      */
     function getRoot() {
         return $http.get('/api/transports')
@@ -28,6 +29,7 @@ function requestFactory($http) {
     /**
      * Requete POST sur /api/transports
      * @param {object} data Information à envoyé au serveur
+     * @return {promise}
      */
     function postNewTrip(data) {
         return $http.post('/api/transports', data)
@@ -38,6 +40,7 @@ function requestFactory($http) {
     /**
      * Requete DELETE sur /api/transports/:id
      * @param {int} id L'id de l'objet à supprimer
+     * @return {promise}
      */
     function deleteTrip(id) {
         return $http.delete('/api/transports/' + id)
@@ -47,7 +50,7 @@ function requestFactory($http) {
 
     /**
      * Retourne l'élement qui nous intéresse de la réponse du serveur
-     * @param response 
+     * @param {response} response 
      * @return {object} Les informations qui nous intéresse
      */
     function trips(response) {
@@ -56,11 +59,10 @@ function requestFactory($http) {
 
     /**
      * Gestion des erreurs
-     * @param response 
+     * @param {response} response 
      * @return {string} L'erreur survenue
      */
     function error(response) {
         return 'error ' + response;
     }
-
 }

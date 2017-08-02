@@ -7,7 +7,6 @@ angular
  * @return {array} Un tableau avec les véhicules
  */
 function vehiculesFactory() {
-
     /* Tableau des moyen de locomotion */
     let vehicules = [
         {'name': 'Voiture', 'value': 'DRIVING'},
@@ -16,5 +15,5 @@ function vehiculesFactory() {
         {'name': 'Transport en commun', 'value': 'TRANSIT'}
     ];
 
-    return vehicules;    
+    return vehicules;
 }

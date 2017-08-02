@@ -2,8 +2,15 @@ angular
     .module('tripAPI')
     .controller('TripController', TripController);
 
-function TripController(googlemapFactory, requestFactory, vehiculesFactory, $rootScope, $scope) {
-
+/**
+ * Controller principal
+ * @param {*} googlemapFactory 
+ * @param {*} requestFactory 
+ * @param {*} vehiculesFactory 
+ * @param {*} $scope
+ */
+function TripController(
+googlemapFactory, requestFactory, vehiculesFactory, $scope) {
     let vm    = this;
     vm.form   = {};
 
@@ -28,18 +35,15 @@ function TripController(googlemapFactory, requestFactory, vehiculesFactory, $roo
      */
     function getAccueil() {
         requestFactory.getRoot().then((res) => {
-
             vm.trips = res;
             updNbTrip();
-
             return vm.trips;
-
         })
         .catch((error) => {
             console.log(error);
             $q.reject(err);
         })
-        .then((valid) => { 
+        .then((valid) => {
             console.log('La page est correctement chargée!');
         });
     }
@@ -50,23 +54,20 @@ function TripController(googlemapFactory, requestFactory, vehiculesFactory, $roo
      * @function setEventOn
      */
     function setEventOn() {
-
-        $rootScope.$on('listen', (ev, data) => {
-
+        $scope.$on('listen', (ev, data) => {
             if (vm.captureFrom) {
                 vm.form.departLat = parseFloat(data.latLng.lat().toFixed(2));
                 vm.form.departLon = parseFloat(data.latLng.lng().toFixed(2));
                 vm.captureFrom    = false;
             }
 
-            if(vm.captureTo) {
+            if (vm.captureTo) {
                 vm.form.arriveLat = parseFloat(data.latLng.lat().toFixed(2));
                 vm.form.arriveLon = parseFloat(data.latLng.lng().toFixed(2));
                 vm.captureTo      = false;
             };
 
             $scope.$apply();
-
         });
     }
 
@@ -75,26 +76,26 @@ function TripController(googlemapFactory, requestFactory, vehiculesFactory, $roo
      * @function addTrip
      */
     function addTrip() {
-
         if ($scope.form.$valid) {
-
             if (!vm.form.comment) {
                 vm.form.comment = '';
             }
 
             requestFactory.postNewTrip(vm.form).then((res) => {
-
                 vm.trips = res;
-
                 updNbTrip();
-                vm.msgAddTrip = { 'stat': true, 'msg': 'Trajet enregistré' };
+                vm.msgAddTrip = {
+                    'stat': true,
+                    'msg': 'Trajet enregistré'
+                };
 
                 vm.form = {};
-
             })
             .catch((err) => {
-                vm.msgAddTrip = { 'stat': false, 'msg': 'Erreur. Impossible d\'enregistrer le trajet' };
-                console.log(err);
+                vm.msgAddTrip = {
+                    'stat': false,
+                    'msg': 'Erreur. Impossible d\'enregistrer le trajet'
+                };
             });
         }
     };
@@ -105,28 +106,33 @@ function TripController(googlemapFactory, requestFactory, vehiculesFactory, $roo
      * @function seeTrip
      */
     function seeTrip() {
-
         vm.tripavoir  = vm.trips[vm.tripchoisi];
         vm.idTrip     = vm.tripchoisi;
 
         let tabDepart = Object.values(vm.trips[vm.tripchoisi].coordinates_from);
         let tabArrive = Object.values(vm.trips[vm.tripchoisi].coordinates_to);
 
-        googlemapFactory.geocoding(tabDepart[0], tabDepart[1])
-        .then((address) => {
+        googlemapFactory.geocoding(
+            tabDepart[0],
+            tabDepart[1]
+        ).then((address) => {
             vm.addressFrom = address;
         });
 
-        googlemapFactory.geocoding(tabArrive[0], tabArrive[1])
-        .then((address) => {
+        googlemapFactory.geocoding(
+            tabArrive[0],
+            tabArrive[1]
+        ).then((address) => {
             vm.addressTo = address;
         });
 
-        googlemapFactory.setDirection(tabDepart, tabArrive, vm.trips[vm.tripchoisi].vehicule)
-        .then((boolMsgErrorVisible) => {
+        googlemapFactory.setDirection(
+            tabDepart,
+            tabArrive,
+            vm.trips[vm.tripchoisi].vehicule
+        ).then((boolMsgErrorVisible) => {
             vm.msgErrorDirectionZeroResult = boolMsgErrorVisible;
         });
-
     };
 
     /**
@@ -135,14 +141,11 @@ function TripController(googlemapFactory, requestFactory, vehiculesFactory, $roo
      * @param {int} id l'id du trip à supprimer
      */
     function delTrip(id) {
-
         requestFactory.deleteTrip(id).then((res) => {
             vm.trips = res;
             vm.tripchoisi = null;
-
             updNbTrip();
             googlemapFactory.refresh();
-
         })
         .catch((err) => {
             console.log(err);
@@ -156,5 +159,4 @@ function TripController(googlemapFactory, requestFactory, vehiculesFactory, $roo
     function updNbTrip() {
         vm.nbtripsinlist = vm.trips.length;
     }
-
 };

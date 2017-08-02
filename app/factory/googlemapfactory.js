@@ -5,12 +5,11 @@ angular
 
 /**
  * Factory pour gerer la google map et les fonctions liées
- * @param $q 
- * @param $rootScope
+ * @param {$q} $q
+ * @param {$rootScope} $rootScope
  * @return {object} retourne les fonctions de la factory
  */
 function googlemapFactory($q, $rootScope) {
-
     let map;
     let directionsDisplay = new google.maps.DirectionsRenderer;
     let directionsService = new google.maps.DirectionsService;
@@ -34,7 +33,6 @@ function googlemapFactory($q, $rootScope) {
      * @return {promise} Retourne un booléen sous forme de promise
      */
     function setDirection(tabDepart, tabArrive, travel) {
-
         let directionErrorZeroResult = $q.defer();
 
         let depart = tabDepart.join(', ');
@@ -50,8 +48,9 @@ function googlemapFactory($q, $rootScope) {
             if (status === 'OK') {
                 directionsDisplay.setMap(map);
                 directionsDisplay.setDirections(response);
-                directionsDisplay.setPanel(document.getElementById('googlemappanel'));
-
+                directionsDisplay.setPanel(
+                    document.getElementById('googlemappanel')
+                );
                 directionErrorZeroResult.resolve(false);
             }
             else {
@@ -73,14 +72,13 @@ function googlemapFactory($q, $rootScope) {
      * @return {promise} Retourne l'adresse formaté sous forme de promise
      */
     function geocoding(lat, lng) {
-
         let adressFromCoord = $q.defer();
 
-        let latlng = { 
-            lat: parseFloat(lat), 
-            lng: parseFloat(lng) 
+        let latlng = {
+            lat: parseFloat(lat),
+            lng: parseFloat(lng)
         };
-        
+
         geocoder.geocode({'location': latlng}, (results, status) => {
             if (status === 'OK') {
                 if (results[1]) {
@@ -103,7 +101,6 @@ function googlemapFactory($q, $rootScope) {
      * @function initMap
      */
     function initMap() {
-
         map = new google.maps.Map(document.getElementById('map'), {
             center: {lat: 49.15, lng: -0.32},
             zoom: 8
@@ -115,7 +112,6 @@ function googlemapFactory($q, $rootScope) {
         map.addListener('rightclick', (coord) => {
             $rootScope.$broadcast('listen', coord);
         });
-
     };
 
     /**
@@ -126,5 +122,4 @@ function googlemapFactory($q, $rootScope) {
         directionsDisplay.setMap(null);
         directionsDisplay.setPanel(null);
     }
-
 }
